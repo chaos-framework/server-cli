@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+		"jsx": "react",
+    "target": "es6",
+    "experimentalDecorators": true,
+    "esModuleInterop": true,
+    "module": "commonjs",
+    "declaration": true,
+    "outDir": "./lib",
+    "strict": true,
+    "types" : [
+      "node"
+    ]
+  },
+  "include": ["src", "test"],
+  "exclude": ["node_modules", "**/test/*"]
+}

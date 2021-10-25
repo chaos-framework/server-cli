@@ -7,5 +7,4 @@ const UI: FC<{name?: string}> = ({name = 'Stranger'}) => (
 	</Text>
 );
 
-module.exports = UI;
 export default UI;

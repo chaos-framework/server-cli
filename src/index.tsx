@@ -1,19 +1,19 @@
 #!/usr/bin/env node
 import React from 'react';
-// import meow from 'meow';
+import meow from 'meow';
 import { render } from 'ink';
 
-import UI from './UI';
+import UI from './UI/index.js';
 
-// const cli = meow(`
-// Usage
-//   $ chaos ../some-chaos-game/bin
+const cli = meow(`
+Usage
+  $ chaos ../some-chaos-game/bin
 
-// Options
-//   --game Redundant flag, as it is the default parameter. Path to game folder or file (automatically assumes index.js otherwise).
+Options
+  --game Redundant flag, as it is the default parameter. Path to game folder or file (automatically assumes index.js otherwise).
 
-// Examples
-//   $ ink --game ../chaos-game/bin
-// `);
+Examples
+  $ ink --game ../chaos-game/bin
+`, { importMeta: import.meta });
 
 render(<UI name={'Chaos'}/>);

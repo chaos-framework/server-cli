@@ -2,8 +2,12 @@
   "name": "@chaos-framework/server-cli",
   "version": "0.0.1",
   "description": "CLI Executable for Chaos Socket.IO server",
-  "main": "./lib/index.js",
+  "exports": "./lib/index.js",
   "types": "./lib/index.d.ts",
+  "type": "module",
+  "engines": {
+    "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
+  },
   "scripts": {
     "build": "tsc",
     "test": "mocha"
@@ -19,13 +23,14 @@
   "license": "ISC",
   "dependencies": {
     "chalk": "^4.1.2",
-    "import-jsx": "^4.0.0",
     "ink": "^3.2.0",
     "meow": "^10.1.1",
     "react": "^17.0.2"
   },
   "devDependencies": {
+    "@types/node": "^16.11.4",
     "@types/react": "^17.0.32",
-    "typescript": "^4.4.4"
+    "tslib": "^2.3.1",
+    "typescript": "^4.5.0-beta"
   }
 }

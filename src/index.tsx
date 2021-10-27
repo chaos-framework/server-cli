@@ -2,7 +2,8 @@
 import React from 'react';
 import meow from 'meow';
 import { render } from 'ink';
-import { Chaos, Game, isGame } from '@chaos/core';
+import { Chaos, Game, isGame, Server } from '@chaos/core';
+import { IOServer } from '@chaos-framework/server-io';
 
 import UI from './UI/ui.js';
 
@@ -20,23 +21,24 @@ const cli = meow(`
 const path = (cli.input[0] || cli.flags.game) as string;
 if (path === undefined) {
   // Show the help text and exit the process.
-  console.log(cli.help);
-  process.exit(1);
+  cli.showHelp(1);
 }
 
 // Import the game passed
-let game;
+let server: Server;
+let game: Game;
 try {
   console.log(`Loading ${path}...`);
-  game = await import(path);
-  game = game.default?.default;
-  if(!isGame(game)) {
+  let module = await import(path);
+  module = module.default?.default;
+  if(isGame(module)) {
+    game = module;
+    server = new IOServer(3000, game);
+    render(<UI game={game} server={server} />);
+  } else {
     console.error(`Module specified at ${path} is not proper Chaos game module.`)
     process.exit(1);
   }
-  console.log(`${Chaos.id} loaded.`);
 } catch (err) {
   console.error(err);
 }
-
-render(<UI name={'Chaos'}/>);

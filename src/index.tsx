@@ -2,7 +2,7 @@
 import React from 'react';
 import meow from 'meow';
 import { render } from 'ink';
-import { Chaos, Game, isGame, Server } from '@chaos/core';
+import { Chaos, Game, isGame, Server } from '@chaos-framework/core';
 import { IOServer } from '@chaos-framework/server-io';
 
 import UI from './UI/ui.js';

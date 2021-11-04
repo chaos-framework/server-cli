@@ -1,7 +1,7 @@
 # Don't include the exported code
 lib
 
-# Internal notes
+# Internal notes and utils
 .scratchpad
 
 # Logs

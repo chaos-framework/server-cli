@@ -4,8 +4,9 @@ import meow from 'meow';
 import { render } from 'ink';
 import { Chaos, Game, isGame, Server } from '@chaos-framework/core';
 import { IOServer } from '@chaos-framework/server-io';
+import { QueryAPI } from '@chaos-framework/api';
 
-import UI from './UI/ui.js';
+import UI from './UI/UI.js';
 
 // Define help text and CLI arguments
 const cli = meow(`
@@ -27,18 +28,22 @@ if (path === undefined) {
 // Import the game passed
 let server: Server;
 let game: Game;
+let api: QueryAPI;
 try {
   console.log(`Loading ${path}...`);
-  let module = await import(path);
-  module = module.default?.default;
-  if(isGame(module)) {
-    game = module;
-    server = new IOServer(3000, game);
-    render(<UI game={game} server={server} />);
-  } else {
-    console.error(`Module specified at ${path} is not proper Chaos game module.`)
-    process.exit(1);
-  }
+  import(path).then(module => {
+    module = module.default?.default;
+    if(isGame(module)) {
+      game = module;
+      api = new QueryAPI(game);
+      server = new IOServer(3000, game);
+      game.initialize({});
+      render(<UI api={api} server={server} />);
+    } else {
+      console.error(`Module specified at ${path} is not proper Chaos game module.`)
+      process.exit(1);
+    }
+  });
 } catch (err) {
   console.error(err);
 }

@@ -11,6 +11,7 @@
   "scripts": {
     "chess": "node lib/index.js ../../examples/chess/lib/index.js",
     "build": "tsc",
+    "withoutArgs": "node lib/index.js",
     "test": "mocha"
   },
   "repository": {
@@ -26,10 +27,12 @@
     "chalk": "^4.1.2",
     "ink": "^3.2.0",
     "ink-spinner": "^4.0.3",
+    "jsonfile": "^6.1.0",
     "meow": "^10.1.1",
     "react": "17.0.2"
   },
   "devDependencies": {
+    "@types/jsonfile": "^6.0.1",
     "@types/node": "^16.11.4",
     "@types/react": "17.0.33",
     "tslib": "^2.3.1",

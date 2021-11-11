@@ -1,21 +1,31 @@
-import React, { useState } from 'react';
+import React, { FC } from 'react';
 import { Box, Text, useApp, useInput } from 'ink';
-import { Game, Server } from '@chaos-framework/core';
+import { Entity, Game, Server } from '@chaos-framework/core';
 import { ChaosProvider, useChaos, useChaosAPI } from '@chaos-framework/react-lib';
-import { QueryAPI } from '@chaos-framework/api';
+import { EntityQuery, QueryAPI } from '@chaos-framework/api';
+import { stringify } from 'querystring';
 
 interface UIProps {
 	api: QueryAPI,
 	server: Server
 }
 
-const EntityList = (props: any): JSX.Element => {
-	// const api = useChaosAPI();
-	const [value, callback] = useState(5);
-	// const entities = useChaos(api.entities());
-	return (<div>hi {value}
-		{/* {Array.from(entities.entries()).map((entry: any) => <span key={entry[0]}>{entry[1].name}</span>)} */}
-	</div>);
+const EntityList = (props: any) => {
+	const api = useChaosAPI();
+	const [, query] = useChaos(api.entities());
+	return (<Text>
+		{Array.from(query.map(([key, subquery]: any) => <EntityInfoRenderer key={key} query={subquery} /> ))}
+	</Text>);
+}
+
+interface EntityProps {
+	query: EntityQuery;
+}
+
+const EntityInfoRenderer = (props: EntityProps) => {
+	const { query } = props;
+	const [name] = useChaos(query.name());
+	return <Text color='green'>{name}</Text>
 }
 
 const UI = (props: UIProps) => {
@@ -29,8 +39,6 @@ const UI = (props: UIProps) => {
 			exit();
 		}
 	});
-
-
 
 	return (
 		<ChaosProvider value={api}>

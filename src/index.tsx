@@ -6,6 +6,7 @@ import { Chaos, Game, isGame, Server } from '@chaos-framework/core';
 import { IOServer } from '@chaos-framework/server-io';
 import { QueryAPI } from '@chaos-framework/api';
 
+import { parseCmdOptions, parseOptionsFile } from './Util/options.js'
 import UI from './UI/UI.js';
 
 // Define help text and CLI arguments
@@ -33,37 +34,46 @@ const cli = meow(`
   `, 
   { 
     importMeta: import.meta,
+    flags: {
+      options: {
+        type: 'string',
+        alias: 'o',
+        isRequired: false
+      }
+    }
   }
 );
 
-// Make sure a path for a game was specified.
-const path = (cli.input[0] || cli.flags.game) as string;
+// Make sure a path for a game was specified
+const path = (cli.input[0]) as string;
 if (path === undefined) {
-  // Show the help text and exit the process.
+  // Show the help text and exit the process
   cli.showHelp(1);
 } else {
-  run(path);
+  const optionsPath = cli.flags.options as string | undefined;
+  const optionsFromCmd = parseCmdOptions(cli.input.slice(1));
+  console.log(optionsFromCmd);
+  run(path, optionsFromCmd, optionsPath);
 }
 
-async function run(path: string, options?: string[], optionsFilePath?: string) {
+async function run(path: string, optionsFromCmd: any = {}, optionsFilePath?: string) {
   // Import the game passed
-  let server: Server;
-  let game: Game;
-  let api: QueryAPI;
   try {
-    console.log(`Loading ${path}...`);
-    const module = import(path) as any;
-    game = module.default?.default;
-    if(!isGame(module)) {
-      throw new Error(`Module specified at ${path} is not proper Chaos game module.`);
+    console.log(`Loading ${path}`);
+    const game = await import(path) as any;
+    if(!isGame(game)) {
+      throw new Error(`Module specified at ${path} is not a proper Chaos game module.`);
     }
-    game = module;
-    api = new QueryAPI(game);
-    server = new IOServer(3000, game);
-    game.initialize({});
+    const api = new QueryAPI(game);
+    const server = new IOServer(3000, game);
+    const optionsFromFile = optionsFilePath !== undefined ? await parseOptionsFile(optionsFilePath) : {};
+    console.log(optionsFromFile);
+    const options = Object.assign(optionsFromFile, optionsFromCmd);
+    console.log(`Options: ${JSON.stringify(options)}`);
+    game.initialize(options);
     render(<UI api={api} server={server} />);
   } catch (err) {
-    console.error(err);
+    console.error((err as Error).message);
     process.exit(0);
   }
 }

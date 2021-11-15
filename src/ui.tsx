@@ -1,9 +1,12 @@
 import React, { FC } from 'react';
-import { Box, Text, useApp, useInput } from 'ink';
-import { Entity, Game, Server } from '@chaos-framework/core';
+import { Box, Newline, Text, useApp, useInput } from 'ink';
+import { Action, Chaos, Entity, Game, Server } from '@chaos-framework/core';
 import { ChaosProvider, useChaos, useChaosAPI } from '@chaos-framework/react-lib';
 import { EntityQuery, QueryAPI } from '@chaos-framework/api';
-import { stringify } from 'querystring';
+
+import Fullscreen from './UI/Fullscreen.js';
+import MessageLog from './Terminal/MessageLog.js';
+import FullScreen from './UI/Fullscreen.js';
 
 interface UIProps {
 	api: QueryAPI,
@@ -13,9 +16,9 @@ interface UIProps {
 const EntityList = (props: any) => {
 	const api = useChaosAPI();
 	const [, query] = useChaos(api.entities());
-	return (<Text>
+	return <Box flexGrow={1}><Text>
 		{Array.from(query.map(([key, subquery]: any) => <EntityInfoRenderer key={key} query={subquery} /> ))}
-	</Text>);
+	</Text></Box>;
 }
 
 interface EntityProps {
@@ -25,7 +28,7 @@ interface EntityProps {
 const EntityInfoRenderer = (props: EntityProps) => {
 	const { query } = props;
 	const [name] = useChaos(query.name());
-	return <Text color='green'>{name}</Text>
+	return <Text color='green'>{name}<Newline /></Text>
 }
 
 const UI = (props: UIProps) => {
@@ -42,8 +45,12 @@ const UI = (props: UIProps) => {
 
 	return (
 		<ChaosProvider value={api}>
-			<Text>Server running.</Text>
-			<EntityList />
+			{/* <FullScreen> */}
+			<Box borderStyle="double" width="100%" flexDirection='row'>
+				<MessageLog />
+				<EntityList />
+			</Box>
+			{/* </FullScreen> */}
 		</ChaosProvider>
 	);
 };

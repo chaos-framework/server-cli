@@ -2,18 +2,24 @@
 import React from 'react';
 import meow from 'meow';
 import { render } from 'ink';
-import { Chaos, Game, isGame, Server } from '@chaos-framework/core';
+import { Action, Chaos, isGame } from '@chaos-framework/core';
 import { IOServer } from '@chaos-framework/server-io';
 import { QueryAPI } from '@chaos-framework/api';
 
 import { parseCmdOptions, parseOptionsFile } from './Util/options.js'
-import UI from './UI/UI.js';
+import UI from './ui.js';
 
 // Define help text and CLI arguments
 const cli = meow(`
   Usage
     $ chaos ../some-chaos-game/bin
-    $ chaos ../some-chaos-game/bin someOption="test" someOtherOption=5
+    $ chaos ../some-chaos-game/bin optionFoo=bar optionFlag
+
+  Parameters
+    The first parameter is a path (or other, see below) to a Chaos game.
+    All following parameters are options for the game in either key=value
+    format or just specifying the key which will set it to true. Options
+    passed will override a supplied options file.
 
   Options
     --options, -o Path to local file containing options for the game in
@@ -71,7 +77,7 @@ async function run(path: string, optionsFromCmd: any = {}, optionsFilePath?: str
     const options = Object.assign(optionsFromFile, optionsFromCmd);
     console.log(`Options: ${JSON.stringify(options)}`);
     game.initialize(options);
-    render(<UI api={api} server={server} />);
+    render(<UI api={api} server={server} />, { patchConsole: false });
   } catch (err) {
     console.error((err as Error).message);
     process.exit(0);

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Newline, Text, useApp, useInput } from 'ink';
 import { Action, Chaos, Entity, Game, Server, TerminalMessage } from '@chaos-framework/core';
-import { ChaosProvider, useChaos, useChaosAPI } from '@chaos-framework/react-lib';
 
 import Message, { MessageProps } from './Message.js'
 
@@ -36,9 +35,10 @@ const MessageLog = (props: any) => {
       const newMessages: MessageProps[] = [];
       for (const action of actions) {
         if (action.generatedMessage !== undefined) {
-          newMessages.push({ type: 'game', message: action.generatedMessage.print() });
+          newMessages.push({ type: 'game', message: action.generatedMessage });
         }
       }
+      pushMessages(newMessages);
     }
     Chaos.attachExecutionHook(handleChaosMessages);
     return () => {

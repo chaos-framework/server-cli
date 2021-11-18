@@ -15,7 +15,7 @@ interface UIProps {
 
 const EntityList = (props: any) => {
 	const api = useChaosAPI();
-	const [, query] = useChaos(api.entities());
+	const [entities, query] = useChaos(api.entities());
 	return <Box flexGrow={1}><Text>
 		{Array.from(query.map(([key, subquery]: any) => <EntityInfoRenderer key={key} query={subquery} /> ))}
 	</Text></Box>;

@@ -17,14 +17,14 @@ const MessageLog = (props: any) => {
     // Rebind the logger in the current JS context to also update the message array
     // OBVIOUSLY don't render two of these loggers unless I set up some higher context provider
     const log = console.log.bind(console)
-    console.log = (...args) => {
+    console.log = (...args: any) => {
       for (const message of args) {
         pushMessages([{ type: 'log', message: message }])
       }
       // log(...args)
     }
     const error = console.error.bind(console)
-    console.error = (...args) => {
+    console.error = (...args: any) => {
       for (const message of args) {
         pushMessages([{ type: 'error', message: message }])
       }

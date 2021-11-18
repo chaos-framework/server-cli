@@ -77,6 +77,7 @@ async function run(path: string, optionsFromCmd: any = {}, optionsFilePath?: str
     const options = Object.assign(optionsFromFile, optionsFromCmd);
     console.log(`Options: ${JSON.stringify(options)}`);
     game.initialize(options);
+    game.play();
     render(<UI api={api} server={server} />, { patchConsole: false });
   } catch (err) {
     console.error((err as Error).message);

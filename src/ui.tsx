@@ -1,12 +1,10 @@
-import React, { FC } from 'react';
+import React from 'react';
 import { Box, Newline, Text, useApp, useInput } from 'ink';
-import { Action, Chaos, Entity, Game, Server } from '@chaos-framework/core';
+import { Server } from '@chaos-framework/core';
 import { ChaosProvider, useChaos, useChaosAPI } from '@chaos-framework/react-lib';
 import { EntityQuery, QueryAPI } from '@chaos-framework/api';
 
-import Fullscreen from './UI/Fullscreen.js';
 import MessageLog from './Terminal/MessageLog.js';
-import FullScreen from './UI/Fullscreen.js';
 
 interface UIProps {
 	api: QueryAPI,

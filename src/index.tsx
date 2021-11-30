@@ -71,9 +71,8 @@ async function run(path: string, optionsFromCmd: any = {}, optionsFilePath?: str
       throw new Error(`Module specified at ${path} is not a proper Chaos game module.`);
     }
     const api = new QueryAPI(game);
-    const server = new IOServer(3000, game);
+    const server = new IOServer(1980, game, { cors: { origin: "http://localhost:3000", methods: ["GET", "POST"] } });
     const optionsFromFile = optionsFilePath !== undefined ? await parseOptionsFile(optionsFilePath) : {};
-    console.log(optionsFromFile);
     const options = Object.assign(optionsFromFile, optionsFromCmd);
     console.log(`Options: ${JSON.stringify(options)}`);
     game.initialize(options);
